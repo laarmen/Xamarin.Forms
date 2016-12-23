@@ -1,15 +1,16 @@
-using System;
-using System.ComponentModel;
-using System.Linq;
 using Android.App;
 using Android.Content.Res;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
+using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
 using ADatePicker = Android.Widget.DatePicker;
 using ATimePicker = Android.Widget.TimePicker;
 using Object = Java.Lang.Object;
 using Orientation = Android.Widget.Orientation;
-using System.Collections.Specialized;
 
 namespace Xamarin.Forms.Platform.Android
 {
@@ -57,6 +58,7 @@ namespace Xamarin.Forms.Platform.Android
 					_textColorSwitcher = new TextColorSwitcher(textField.TextColors);
 					SetNativeControl(textField);
 				}
+				UpdateFont();
 				UpdatePicker();
 				UpdateTextColor();
 			}
@@ -70,10 +72,16 @@ namespace Xamarin.Forms.Platform.Android
 
 			if (e.PropertyName == Picker.TitleProperty.PropertyName)
 				UpdatePicker();
-			if (e.PropertyName == Picker.SelectedIndexProperty.PropertyName)
+			else if (e.PropertyName == Picker.SelectedIndexProperty.PropertyName)
 				UpdatePicker();
-			if (e.PropertyName == Picker.TextColorProperty.PropertyName)
+			else if (e.PropertyName == Picker.TextColorProperty.PropertyName)
 				UpdateTextColor();
+			else if (e.PropertyName == Picker.FontAttributesProperty.PropertyName)
+				UpdateFont();
+			else if (e.PropertyName == Picker.FontFamilyProperty.PropertyName)
+				UpdateFont();
+			else if (e.PropertyName == Picker.FontSizeProperty.PropertyName)
+				UpdateFont();
 		}
 
 		internal override void OnFocusChangeRequested(object sender, VisualElement.FocusRequestArgs e)
@@ -150,6 +158,12 @@ namespace Xamarin.Forms.Platform.Android
 		void RowsCollectionChanged(object sender, EventArgs e)
 		{
 			UpdatePicker();
+		}
+
+		void UpdateFont()
+		{
+			Control.Typeface = Element.ToTypeface();
+			Control.SetTextSize(ComplexUnitType.Sp, (float)Element.FontSize);
 		}
 
 		void UpdatePicker()
