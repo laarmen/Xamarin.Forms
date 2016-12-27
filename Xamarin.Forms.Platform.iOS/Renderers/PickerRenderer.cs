@@ -53,6 +53,7 @@ namespace Xamarin.Forms.Platform.iOS
 
 				_picker.Model = new PickerSource(this);
 
+				UpdateFont();
 				UpdatePicker();
 				UpdateTextColor();
 
@@ -67,10 +68,16 @@ namespace Xamarin.Forms.Platform.iOS
 			base.OnElementPropertyChanged(sender, e);
 			if (e.PropertyName == Picker.TitleProperty.PropertyName)
 				UpdatePicker();
-			if (e.PropertyName == Picker.SelectedIndexProperty.PropertyName)
+			else if (e.PropertyName == Picker.SelectedIndexProperty.PropertyName)
 				UpdatePicker();
-			if (e.PropertyName == Picker.TextColorProperty.PropertyName || e.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
+			else if (e.PropertyName == Picker.TextColorProperty.PropertyName || e.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
 				UpdateTextColor();
+			else if (e.PropertyName == Picker.FontAttributesProperty.PropertyName)
+				UpdateFont();
+			else if (e.PropertyName == Picker.FontFamilyProperty.PropertyName)
+				UpdateFont();
+			else if (e.PropertyName == Picker.FontSizeProperty.PropertyName)
+				UpdateFont();
 		}
 
 		void OnEnded(object sender, EventArgs eventArgs)
@@ -86,6 +93,11 @@ namespace Xamarin.Forms.Platform.iOS
 		void RowsCollectionChanged(object sender, EventArgs e)
 		{
 			UpdatePicker();
+		}
+
+		void UpdateFont()
+		{
+			Control.Font = Element.ToUIFont();
 		}
 
 		void UpdatePicker()
